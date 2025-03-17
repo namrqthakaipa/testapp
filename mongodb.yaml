@@ -6,7 +6,7 @@ networks:
 services:
   mongo:
     image: mongo
-    container_name: mongodb
+    container_name: mongo
     restart: always
     ports:
       - "27017:27017"
@@ -30,6 +30,18 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: qwerty
       ME_CONFIG_MONGODB_URL: mongodb://admin:qwerty@mongo:27017/admin
+    networks:
+      - my_network
+  node-app:
+    image: namratha0228/testapp
+    container_name: node-app
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "5050:5050"
+    environment:
+      MONGO_URL: mongodb://admin:qwerty@mongo:27017/admin
     networks:
       - my_network
 

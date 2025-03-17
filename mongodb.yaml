@@ -1,21 +1,37 @@
 version: "3.8"
 
+networks:
+  my_network: {}
+
 services:
   mongo:
     image: mongo
+    container_name: mongodb
+    restart: always
     ports:
-    - 27017:27017
+      - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME : admin
-      MONGO_INITDB_ROOT_PASSWORD : qwerty
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: qwerty
+    networks:
+      - my_network
     volumes:
-    - "$HOME/Desktop/data:/data/db"
+      - mongo_data:/data/db  # Uses named volume
 
-  mongo-exprss:
+  mongo-express:
     image: mongo-express
+    container_name: mongo-express
+    restart: always
+    depends_on:
+      - mongo
     ports:
-    - 8081:8081
+      - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME : admin 
-      ME_CONFIG_MONGODB_ADMINPASSWORD : qwerty 
-      ME_CONFIG_MONGODB_URL: mongodb://admin:qwerty@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: qwerty
+      ME_CONFIG_MONGODB_URL: mongodb://admin:qwerty@mongo:27017/admin
+    networks:
+      - my_network
+
+volumes:
+  mongo_data: {}  # Correct volume definition

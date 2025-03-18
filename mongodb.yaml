@@ -1,7 +1,8 @@
 version: "3.8"
 
 networks:
-  my_network: {}
+  my_network:
+    name: my_network
 
 services:
   mongo:
@@ -16,7 +17,7 @@ services:
     networks:
       - my_network
     volumes:
-      - mongo_data:/data/db  # Uses named volume
+      - mongo_data:/data/db 
 
   mongo-express:
     image: mongo-express
@@ -46,4 +47,4 @@ services:
       - my_network
 
 volumes:
-  mongo_data: {}  # Correct volume definition
+  mongo_data: {}  
